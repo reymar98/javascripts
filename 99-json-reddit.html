@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>jQuery.getJSON reddit</title>
+<script language=JavaScript type=text/javascript>
+  //---------------------------------------------------------------------------------------------
+// get parameter
+
+var str = location.search;
+var xparm = str.substring(1, str.length);
+
+//---------------------------------------------------------------------------------------------
+// test.html?a=100&b=200&c=300&d=400
+
+ var url = window.location.toString();
+ //get the parameters
+ url.match(/\?(.+)$/);
+ var params = RegExp.$1;
+ // split up the query string and store in an
+ // associative array
+ var params = params.split("&");
+ var queryStringList = {};
+
+ for(var i=0;i<params.length;i++)
+ {
+  var tmp = params[i].split("=");
+  queryStringList[tmp[0]] = unescape(tmp[1]);
+ }
+
+var xparm1 = queryStringList['a']; //---hour
+var xparm2 = queryStringList['b']; //---flag
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<style>
+a:link {
+  background-color: red;
+}
+a:visited {
+  background-color: cyan;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:active {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<p id="demo3"></p>   
+<script>
+//-----------------------------------------------  
+function visitedLinks(z1){  
+//z1.style.visibility = 'hidden';
+z1.style.color = '#555'; 
+}
+//-----------------------------------------------  
+function colorLinks(hex)
+{
+    var links = document.getElementsByTagName("a");
+    for(var i=0;i<links.length;i++)
+    {
+        if (links[i].href)
+        {
+            links[i].style.color = '#fff'; 
+            links[i].style.textDecoration = 'none';
+            links[i].style.font = "bold 16px arial,serif"; 
+        }
+    }  
+}  
+//-----------------------------------------------
+function useRedditFrame(p10){
+//if (p10.indexOf('i.imgur.com')>0){ return false;}
+return false;
+if (p10.indexOf('.gifv')>0){ return true;}
+if (p10.indexOf('.mp4')>0){ return true;}
+return false;
+}
+//-----------------------------------------------
+function isRedditImage(p10){
+//if (p10.indexOf('i.imgur.com')>0){ return false;}
+if (p10.indexOf('.jpg')>0){ return true;}
+if (p10.indexOf('.webp')>0){ return true;}
+if (p10.indexOf('.png')>0){ return true;}
+if (p10.indexOf('.jpg')>0){ return true;}
+if (p10.indexOf('.jpeg')>0){ return true;}
+if (p10.indexOf('.gifv')>0){ return false;}
+if (p10.indexOf('.gif')>0){ return true;}
+return false;
+}
+//-----------------------------------------------
+function validRedditLink(p10){
+if (isRedditImage(p10)){return true;}
+if (useRedditFrame(p10)){return true;}
+if (xparm2==3){return true;}
+if (xparm2==2){return true;}
+return false;
+}
+//-----------------------------------------------
+function showContent(rl10,rl11,rl12,rl13,rl14){
+
+document.write("<table border='1' width='100%' cellpadding='5'>")
+for (jj=0;jj<rl11.length;jj++){
+if (rl11[jj]!=null){
+if (validRedditLink(rl11[jj])){
+document.write("<tr><td width='500'>");
+document.write("<a onClick='visitedLinks(this)' href='"+ rl12[jj] +"' target='reddit'>"+rl10[jj]+"</a>");
+if (useRedditFrame(rl11[jj])){
+document.write("<br><iframe style='background-color:#fff' width='700' height='400' src='"+rl11[jj]+"' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>");
+} 
+if (isRedditImage(rl11[jj])){
+document.write("<br><a href="+ rl11[jj] +" target='xxx'><img src='"+ rl11[jj] +"' width='550'></a>");
+}
+if (xparm1=='kitchener'){rl14[jj]='';}
+if (rl14[jj].length>1){
+document.write("<br><font color='#fff'><p>"+ rl14[jj]+"</p></font>");
+}
+document.write('</td>'); 
+showLink(jj);
+document.write('</tr>');
+}
+}
+}
+//
+/*
+for (jj=0;jj<rl12.length;jj++){
+if (rl11[jj]==null){
+document.write('<tr><td>');
+document.write("<br><a href='"+ rl12[jj] +"' target='reddit'>"+rl10[jj]+"</a><br>");
+if (rl13[jj]!=null){
+document.write("<br><iframe style='background-color:#fff' width='700' height='400' src='"+rl13[jj]+"' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>");
+}
+//showLink1();
+showLink(jj);
+//else{ document.write('<td></td>');  }
+document.write('</td></tr>');
+}
+}
+*/
+/*
+for (jj=0;jj<rl13.length;jj++){
+if (rl13[jj]!=null){
+document.write('<tr><td>');
+document.write("<iframe style='background-color:#fff' width='700' height='400' src='"+rl13[jj]+"' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>"); 
+if (jj==0){ showLink();}
+else{ document.write('<td></td>');  }
+document.write('</td></tr>');
+}
+}
+*/
+
+document.write('</table>');
+document.write("<br>");
+document.write("<hr><hr><hr>");
+document.write("<br><br><A HREF='https://www.reddit.com/r/"+xparm1+"/.json' target='_self'>json</A>");
+//document.write("https://www.reddit.com/r/"+xparm1+"/.json");
+//document.write("<br><img src='https://i.imgur.com/LTBsdyB.gifv' width='550'>");
+//document.write("<iframe style='background-color:#000000' width='50%' height='50%' src='https://i.imgur.com/LTBsdyB.gifv' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>");
+}
+//------------------------------------------
+function showLink(p10){
+if (xparm2!=3){p10=8;}
+if (p10 % 8 ){
+document.write("<td width='100' valign='top'>");
+document.write('</td>');  
+}
+else{
+showLink1();
+}
+}
+//------------------------------------------
+function showLink1(){
+document.write("<td width='100' valign='top'>");
+if (xparm2!=2){
+pLink="99-json-reddit.html?a=meme&b=1";pText="meme";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>"); 
+pLink="99-json-reddit.html?a=news&b=3"; pText="news";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+}
+document.write("<hr>");
+//
+if (xparm2==3){
+//
+pLink="99-json-reddit.html?a=worldnews&b=3"; pText="worldnews";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=ontario&b=3"; pText="ontario";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=kitchener&b=3"; pText="kitchener";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=Philippines&b=3"; pText="Philippines";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=coronavirus&b=3";pText="coronavirus";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=LifeProTips&b=3";pText="LifeProTips";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=todayilearned&b=3";pText="todayilearned";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pText="Jokes"; pLink="99-json-reddit.html?a="+pText+"&b=3";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=Truckers&b=3";pText="Truckers";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+//
+pLink="99-json-reddit.html?a=IdiotsInCars&b=3";pText="IdiotsInCars";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>");
+}
+//
+if (xparm2==1){
+pLink="99-json-reddit.html?a=PoliticalHumor&b=1";pText="PoliticalHumor";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>"); 
+//
+pLink="99-json-reddit.html?a=windowsmemes&b=1";pText="windowsmemes";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>"); 
+//
+pLink="99-json-reddit.html?a=ProgrammerHumor&b=1";pText="ProgrammerHumor";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>"); 
+//
+pLink="99-json-reddit.html?a=mmamemes&b=1";pText="mmamemes";
+document.write("<br><br><A HREF='"+pLink+"' target='_self'>"+pText+"</A>"); 
+}
+//
+document.write('</td>');
+}
+//
+</script>
+
+<script>
+//if (xparm2!=null){ xparm2=Number(xparm2);  }
+if (xparm2==null){xparm2='3';}
+if (xparm1==null){xparm2='news';}
+xparm2=Number(xparm2);
+//xparm1='news'; 
+document.title='json:'+xparm1;
+rl10 = new Array(); //--data.title
+rl11 = new Array(); //--data.url
+rl12 = new Array(); //--data.url/data.permalink
+rl13 = new Array(); //---video
+rl14 = new Array(); //---text
+
+(function() {
+  js10 = new Array;
+  var flickerAPI = "https://www.reddit.com/r/memes/.json";
+  if (xparm1!=null){flickerAPI = 'https://www.reddit.com/r/'+xparm1+'/.json'}
+  //https://www.reddit.com/r/windowsmemes/.json
+  document.getElementById("demo3").innerHTML += '<br>' + '---'+ flickerAPI ;
+
+  $.getJSON( flickerAPI, {
+  })
+    .done(function( data ) {
+      myJSON = JSON.stringify(data);
+      localStorage.setItem("testJSON", myJSON);
+      text = localStorage.getItem("testJSON");
+       myObj = JSON.parse(text);
+       nn=0; z3=0;
+       for (x in myObj) {
+        z1=x;z2=myObj[x];
+        //if (z1=='kind'){  document.getElementById("demo3").innerHTML += "<br>:"+myObj[x];}
+        //if (z1=='data'){  document.getElementById("demo3").innerHTML += "<br>:"+z2.dist; z3=Number(z2.dist);}  
+        if (z1=='data'){z3=Number(z2.dist);}
+        if (z3>0){
+        for (ii=0;ii<z3;ii++){
+ //         if (z1=='data'){  document.getElementById("demo3").innerHTML += ":"+z2.children[ii].data.title +"<br>";} nn++;
+          if (z1=='data'){ 
+ //          document.getElementById("demo3").innerHTML += "<br>:"+z2.children[ii].data.url_overridden_by_dest; 
+ //          js10[ii]=z2.children[ii].data.url;
+           z4=z2.children[ii].data.url;  z10='zzz';
+           rl10[ii]=z2.children[ii].data.title;
+           rl14[ii]=z2.children[ii].data.selftext;
+           rl12[ii]=z4; rl12[ii]='https://www.reddit.com'+z2.children[ii].data.permalink;
+           //z4 = z4.toLowerCase(); z5=null; z6=false;
+           rl11[ii]=z4; 
+           if (z4.indexOf('v.redd.it')>0){ rl11[ii]=z4+'/DASH_240.mp4'; }
+        }
+        }}
+}
+showContent(rl10,rl11,rl12,rl13,rl14);
+document.body.style.backgroundColor = "#000";
+colorLinks("#00FF00");
+//
+});
+})();
+/*
+https://www.reddit.com/r/redditdev/.json
+*/
+</script> 
+</body>
+</html>
